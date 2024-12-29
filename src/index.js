@@ -10,22 +10,25 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(morgan("dev"));
 
-// Simple CORS middleware
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+// CORS middleware
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ],
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
 
-  // Handle preflight
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  next();
-});
+// Handle OPTIONS requests
+app.options("*", cors());
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
