@@ -9,9 +9,9 @@ const db = require("../db");
 // Request OTP
 const requestOTP = async (req, res) => {
   try {
-    const { phoneNumber } = req.body;
+    const { phone_number } = req.body;
 
-    if (!phoneNumber) {
+    if (!phone_number) {
       return res.status(400).json({
         success: false,
         message: "Phone number is required",
@@ -22,7 +22,7 @@ const requestOTP = async (req, res) => {
     const otpCode = generateOTP();
 
     // Save OTP to database
-    const saved = await saveOTP(phoneNumber, otpCode);
+    const saved = await saveOTP(phone_number, otpCode);
 
     if (!saved) {
       return res.status(500).json({
