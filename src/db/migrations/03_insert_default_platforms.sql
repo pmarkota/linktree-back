@@ -1,0 +1,46 @@
+-- Insert default social platforms
+INSERT INTO platforms (
+    name,
+    icon_url,
+    is_active
+) VALUES 
+(
+    'Instagram',
+    '/platforms/instagram.svg',
+    true
+),
+(
+    'Twitter',
+    '/platforms/twitter.svg',
+    true
+),
+(
+    'LinkedIn',
+    '/platforms/linkedin.svg',
+    true
+),
+(
+    'Facebook',
+    '/platforms/facebook.svg',
+    true
+),
+(
+    'YouTube',
+    '/platforms/youtube.svg',
+    true
+),
+(
+    'TikTok',
+    '/platforms/tiktok.svg',
+    true
+),
+(
+    'GitHub',
+    '/platforms/github.svg',
+    true
+),
+(
+    'Website',
+    '/platforms/website.svg',
+    true
+); 
