@@ -50,9 +50,9 @@ const requestOTP = async (req, res) => {
 // Verify OTP
 const verifyOTP = async (req, res) => {
   try {
-    const { phoneNumber, otpCode } = req.body;
+    const { phone_number, otpCode } = req.body;
 
-    if (!phoneNumber || !otpCode) {
+    if (!phone_number || !otpCode) {
       return res.status(400).json({
         success: false,
         message: "Phone number and OTP are required",
@@ -60,7 +60,7 @@ const verifyOTP = async (req, res) => {
     }
 
     // Verify OTP
-    const isValid = await verifyOTPUtil(phoneNumber, otpCode);
+    const isValid = await verifyOTPUtil(phone_number, otpCode);
 
     if (!isValid) {
       return res.status(400).json({
@@ -71,7 +71,7 @@ const verifyOTP = async (req, res) => {
 
     // Check if user exists
     let user = await db.query("SELECT * FROM users WHERE phone_number = $1", [
-      phoneNumber,
+      phone_number,
     ]);
 
     let userId;
@@ -81,7 +81,7 @@ const verifyOTP = async (req, res) => {
       // Create new user
       const newUser = await db.query(
         "INSERT INTO users (phone_number, is_verified) VALUES ($1, $2) RETURNING id",
-        [phoneNumber, true]
+        [phone_number, true]
       );
       userId = newUser.rows[0].id;
       isNewUser = true;
@@ -97,7 +97,7 @@ const verifyOTP = async (req, res) => {
     const token = jwt.sign(
       {
         userId,
-        phoneNumber,
+        phone_number,
         role: user.rows[0]?.role || "user",
       },
       process.env.JWT_SECRET,
