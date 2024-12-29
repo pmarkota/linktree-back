@@ -9,11 +9,16 @@ const app = express();
 const corsOptions = {
   origin:
     process.env.NODE_ENV === "production"
-      ? ["your-production-domain.com"]
+      ? [
+          "https://linktree-front-murex.vercel.app",
+          "https://linktree.me",
+          "https://*.linktree.me",
+        ]
       : ["http://localhost:3000", "http://127.0.0.1:3000"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
+  optionsSuccessStatus: 200,
 };
 
 // Middleware
