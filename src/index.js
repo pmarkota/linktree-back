@@ -5,19 +5,22 @@ require("dotenv").config();
 
 const app = express();
 
+// Enable pre-flight requests for all routes
+app.options("*", cors());
+
 // CORS configuration
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? [
-          "https://linktree-front-murex.vercel.app",
-          "https://linktree.me",
-          "https://*.linktree.me",
-        ]
-      : ["http://localhost:3000", "http://127.0.0.1:3000"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: true, // Allow all origins
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+  ],
   credentials: true,
+  maxAge: 86400, // 24 hours
+  preflightContinue: false,
   optionsSuccessStatus: 200,
 };
 
@@ -26,6 +29,20 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(morgan("dev"));
+
+// Add CORS headers to all responses
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With, Accept"
+  );
+  next();
+});
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
